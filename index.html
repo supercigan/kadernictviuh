@@ -123,6 +123,19 @@
     .d4 { transition-delay: 0.4s; }
     .d5 { transition-delay: 0.5s; }
     .d6 { transition-delay: 0.6s; }
+    /* Hero items animate via CSS keyframes — not JS observer */
+    .hero .fade-up {
+      opacity: 0;
+      animation: heroFadeUp 0.7s ease forwards;
+    }
+    .hero .fade-up.d1 { animation-delay: 0.15s; }
+    .hero .fade-up.d2 { animation-delay: 0.3s; }
+    .hero .fade-up.d3 { animation-delay: 0.45s; }
+    .hero .fade-up.d4 { animation-delay: 0.6s; }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     /* ===== NAV ===== */
     nav {
@@ -277,8 +290,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(201,168,76,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.07) 1px, transparent 1px);
       background-size: 80px 80px;
       pointer-events: none;
     }
@@ -292,7 +305,7 @@
       font-size: clamp(200px, 30vw, 380px);
       font-weight: 700;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(201,168,76,0.1);
+      -webkit-text-stroke: 1px rgba(201,168,76,0.18);
       line-height: 1;
       pointer-events: none;
       user-select: none;
@@ -337,7 +350,7 @@
     }
     .hero-sub {
       font-size: 1.05rem;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,0.78);
       max-width: 520px;
       line-height: 1.7;
       margin-bottom: 2.5rem;
@@ -361,11 +374,11 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      color: rgba(255,255,255,0.7);
-      font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
     }
     .hero-info-item svg {
-      width: 16px; height: 16px;
+      width: 17px; height: 17px;
       color: var(--gold);
       flex-shrink: 0;
     }
@@ -387,7 +400,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
-      align-items: end;
+      align-items: center;
       margin-bottom: 5rem;
     }
     .about-header h2 {
@@ -409,9 +422,11 @@
     .about-card {
       background: var(--white);
       border-radius: 4px;
-      padding: 2.2rem 1.8rem;
+      padding: 2.4rem 2rem;
       border-top: 3px solid var(--gold);
       transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
     }
     .about-card:hover {
       transform: translateY(-6px);
@@ -421,10 +436,9 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 3rem;
       font-weight: 300;
-      color: var(--gold);
+      color: var(--gold-d);
       line-height: 1;
       margin-bottom: 1.2rem;
-      opacity: 0.5;
     }
     .about-card h4 {
       font-size: 1.05rem;
@@ -454,13 +468,23 @@
     .services-header .section-label {
       justify-content: center;
     }
-    .services-header .section-label::before { display: none; }
+    .services-header .section-label::before {
+      display: block;
+    }
+    .services-header .section-label::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 2px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
     .services-header h2 {
       color: var(--white);
       margin-bottom: 1rem;
     }
     .services-header p {
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.75);
       max-width: 520px;
       margin: 0 auto;
     }
@@ -480,9 +504,9 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 0.65rem 1.8rem;
-      border: 1.5px solid rgba(201,168,76,0.35);
-      background: transparent;
-      color: rgba(255,255,255,0.6);
+      border: 1.5px solid rgba(201,168,76,0.45);
+      background: rgba(201,168,76,0.06);
+      color: rgba(255,255,255,0.78);
       border-radius: 3px;
       cursor: pointer;
       transition: all 0.25s;
@@ -501,21 +525,28 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius: 4px;
       overflow: hidden;
     }
+    /* Sparse tabs (Pánské, Ostatní) center their items */
+    #tab-panske .price-grid,
+    #tab-ostatni .price-grid {
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      max-width: 740px;
+      margin: 0 auto;
+    }
     .price-item {
-      background: rgba(15,32,24,0.5);
+      background: rgba(15,32,24,0.65);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.1rem 1.5rem;
+      padding: 1.15rem 1.6rem;
       gap: 1rem;
       transition: background 0.25s;
     }
-    .price-item:hover { background: rgba(45,106,79,0.3); }
+    .price-item:hover { background: rgba(45,106,79,0.35); }
     .price-item-name {
       font-size: 0.95rem;
       color: rgba(255,255,255,0.85);
@@ -530,7 +561,7 @@
     }
     .price-note {
       text-align: center;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.65);
       font-size: 0.82rem;
       margin-top: 1.5rem;
       font-style: italic;
@@ -578,7 +609,7 @@
     .solarium-price-unit {
       position: relative;
       font-size: 1.05rem;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.85);
       font-family: 'Jost', sans-serif;
       font-weight: 400;
       margin-bottom: 2rem;
@@ -603,7 +634,7 @@
       font-size: 0.8rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.72);
       font-family: 'Jost', sans-serif;
     }
     .solarium-content h2 { margin-bottom: 1rem; }
@@ -623,18 +654,22 @@
       color: var(--text-mid);
     }
     .solarium-features li::before {
-      content: '';
-      width: 16px;
-      height: 16px;
-      background: var(--gold);
+      content: '✓';
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      background: rgba(201,168,76,0.18);
+      border: 1.5px solid rgba(201,168,76,0.5);
       border-radius: 50%;
       flex-shrink: 0;
-      margin-top: 4px;
+      margin-top: 2px;
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* checkmark via clip-path */
-      clip-path: polygon(20% 50%, 40% 70%, 80% 25%, 80% 40%, 40% 85%, 20% 65%);
+      line-height: 1;
     }
 
     /* ===== GALLERY ===== */
@@ -685,27 +720,40 @@
       background: linear-gradient(135deg, var(--deep-green-m) 0%, var(--emerald) 100%);
       opacity: 0.8;
     }
+    /* Dark gradient overlay so label is always readable */
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(to top, rgba(5,15,10,0.72) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
     .gallery-item-label {
       position: absolute;
       bottom: 1.2rem;
-      left: 1.2rem;
-      right: 1.2rem;
-      font-size: 0.82rem;
-      letter-spacing: 0.1em;
+      left: 1.4rem;
+      right: 1.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.92);
       font-family: 'Jost', sans-serif;
+      z-index: 2;
     }
     .gallery-item-icon {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -55%);
+      z-index: 2;
     }
     .gallery-item-icon svg {
-      width: 40px;
-      height: 40px;
-      color: rgba(201,168,76,0.4);
+      width: 44px;
+      height: 44px;
+      color: rgba(201,168,76,0.82);
     }
 
     /* ===== CONTACT ===== */
@@ -728,7 +776,7 @@
       font-size: clamp(2rem, 4vw, 3rem);
     }
     .contact-info > p {
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.75);
       margin-bottom: 2.5rem;
       font-size: 0.95rem;
     }
@@ -765,7 +813,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.65);
       margin-bottom: 0.2rem;
     }
     .contact-detail-value {
@@ -780,8 +828,8 @@
     .contact-detail-value a:hover { color: var(--gold); }
 
     .hours-table {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -794,9 +842,9 @@
       font-size: 0.9rem;
     }
     .hours-row:last-child { border-bottom: none; }
-    .hours-day { color: rgba(255,255,255,0.7); }
+    .hours-day { color: rgba(255,255,255,0.82); }
     .hours-time { color: var(--gold); font-weight: 600; }
-    .hours-closed { color: rgba(255,255,255,0.3); }
+    .hours-closed { color: rgba(255,255,255,0.45); }
 
     /* Contact Form */
     .contact-form-wrap h3 {
@@ -805,7 +853,7 @@
       font-size: 1.6rem;
     }
     .contact-form-wrap > p {
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.7);
       font-size: 0.9rem;
       margin-bottom: 2rem;
     }
@@ -829,13 +877,13 @@
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.72);
     }
     .form-group input,
     .form-group textarea,
     .form-group select {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22);
       border-radius: 3px;
       padding: 0.85rem 1rem;
       font-family: 'Jost', sans-serif;
@@ -846,7 +894,7 @@
     }
     .form-group input::placeholder,
     .form-group textarea::placeholder {
-      color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.42);
     }
     .form-group input:focus,
     .form-group textarea:focus,
@@ -865,7 +913,7 @@
     }
     .form-note {
       font-size: 0.8rem;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.6);
       font-style: italic;
     }
     .form-success {
@@ -897,7 +945,7 @@
     }
     .footer-brand .nav-logo { margin-bottom: 1.2rem; }
     .footer-brand p {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.62);
       font-size: 0.9rem;
       line-height: 1.65;
       max-width: 280px;
@@ -909,12 +957,12 @@
     }
     .footer-social a {
       width: 36px; height: 36px;
-      background: rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.1);
       border-radius: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.7);
       text-decoration: none;
       transition: background 0.25s, color 0.25s;
     }
@@ -927,7 +975,7 @@
       font-weight: 700;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.7);
       margin-bottom: 1.2rem;
     }
     .footer-col ul { list-style: none; }
@@ -935,14 +983,14 @@
       margin-bottom: 0.65rem;
     }
     .footer-col ul li a {
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.7);
       text-decoration: none;
       font-size: 0.9rem;
       transition: color 0.2s;
     }
     .footer-col ul li a:hover { color: var(--gold); }
     .footer-col p {
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.7);
       font-size: 0.88rem;
       line-height: 1.7;
     }
@@ -955,11 +1003,11 @@
       flex-wrap: wrap;
     }
     .footer-bottom p {
-      color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.5);
       font-size: 0.8rem;
     }
     .footer-bottom a {
-      color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.5);
       text-decoration: none;
     }
     .footer-bottom a:hover { color: var(--gold); }
@@ -1238,61 +1286,78 @@
     </div>
 
     <div class="gallery-grid">
+      <!-- Dámské střihy: nůžky -->
       <div class="gallery-item fade-up d1">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #162E20 0%, #2D5A40 100%);"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #162E20 0%, #2D5A40 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="6" r="3"/>
+            <circle cx="6" cy="18" r="3"/>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+            <line x1="8.12" y1="8.12" x2="12" y2="12"/>
           </svg>
         </div>
         <div class="gallery-item-label">Dámské střihy</div>
       </div>
+      <!-- Pánské střihy: holicí strojek (obdélník s linkou) -->
       <div class="gallery-item fade-up d2">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #1E3A28 0%, #3D6B50 100%);"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #1E3A28 0%, #3D6B50 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- comb icon -->
+            <path d="M3 5h18v3a1 1 0 01-1 1H4a1 1 0 01-1-1V5z"/>
+            <line x1="7" y1="9" x2="7" y2="19"/>
+            <line x1="10" y1="9" x2="10" y2="19"/>
+            <line x1="13" y1="9" x2="13" y2="19"/>
+            <line x1="16" y1="9" x2="16" y2="19"/>
           </svg>
         </div>
         <div class="gallery-item-label">Pánské střihy</div>
       </div>
+      <!-- Barvení: kapka barvy -->
       <div class="gallery-item fade-up d3">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #3D6B50 0%, #C9A84C 100%); opacity: 0.7;"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #2D5A40 0%, #1A3A2A 60%, #A88530 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 3c-1.2 5.4-5 7-5 11a5 5 0 0010 0c0-4-3.8-5.6-5-11z"/>
-            <line x1="12" y1="19" x2="12" y2="22"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
           </svg>
         </div>
         <div class="gallery-item-label">Barvení</div>
       </div>
+      <!-- Balayage & Melíry: štětec / pero -->
       <div class="gallery-item fade-up d1">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #0F2018 0%, #1A4030 100%);"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #0F2018 0%, #1A4030 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- paintbrush -->
+            <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a2.12 2.12 0 00-3-3z"/>
+            <path d="M9 8c-2 3-4 3.5-7 4l8 8c1-.5 3.5-2 4-7"/>
+            <path d="M14.5 17.5 4.5 15"/>
           </svg>
         </div>
         <div class="gallery-item-label">Balayage & Melíry</div>
       </div>
+      <!-- Společenské účesy: hvězda/koruna -->
       <div class="gallery-item fade-up d2">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #243F30 0%, #4A7A5A 100%);"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #243F30 0%, #4A7A5A 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- crown -->
+            <path d="M3 19h18M5 19l2-8 5 4 5-4 2 8"/>
+            <circle cx="12" cy="7" r="2"/>
           </svg>
         </div>
         <div class="gallery-item-label">Společenské účesy</div>
       </div>
+      <!-- Goldwell péče: list / příroda -->
       <div class="gallery-item fade-up d3">
-        <div class="gallery-item-bg" style="background: linear-gradient(135deg, #C9A84C 0%, #1A3A2A 100%); opacity:0.8;"></div>
+        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #1A3A2A 0%, #3D7A55 100%);"></div>
         <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/>
-            <rect x="9" y="11" width="14" height="10" rx="2" ry="2"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- leaf -->
+            <path d="M17 8C8 10 5.9 16.17 3.82 19c0 0 .93.17 2.18.17C9.61 19.17 15 16.5 17 8z"/>
+            <path d="M3.82 19c0 0 2-4.83 5.18-7"/>
           </svg>
         </div>
         <div class="gallery-item-label">Goldwell péče</div>
@@ -1488,8 +1553,8 @@
         <p>
           Josefa Stancla 153<br />
           686 01 Uherské Hradiště<br /><br />
-          <a href="tel:+420606452190" style="color:rgba(255,255,255,0.55); text-decoration:none;">+420 606 452 190</a><br />
-          <a href="mailto:info@kadernictviuh.cz" style="color:rgba(255,255,255,0.55); text-decoration:none;">info@kadernictviuh.cz</a><br /><br />
+          <a href="tel:+420606452190" style="color:rgba(255,255,255,0.78); text-decoration:none;">+420 606 452 190</a><br />
+          <a href="mailto:info@kadernictviuh.cz" style="color:rgba(255,255,255,0.78); text-decoration:none;">info@kadernictviuh.cz</a><br /><br />
           Po–Pá: 8:00–18:00
         </p>
       </div>

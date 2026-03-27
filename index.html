@@ -700,60 +700,105 @@
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .gallery-item {
       border-radius: 4px;
       overflow: hidden;
-      background: var(--deep-green);
+      background: var(--deep-green-m);
       position: relative;
-      aspect-ratio: 3/4;
-      transition: transform 0.3s;
+      aspect-ratio: 4/3;
+      cursor: pointer;
     }
-    .gallery-item:nth-child(1) { grid-row: span 2; aspect-ratio: auto; }
-    .gallery-item:nth-child(4) { grid-row: span 2; aspect-ratio: auto; }
-    .gallery-item:hover { transform: scale(1.02); z-index: 2; }
-    .gallery-item-bg {
+    /* Taller items for visual rhythm */
+    .gallery-item:nth-child(1),
+    .gallery-item:nth-child(6),
+    .gallery-item:nth-child(11) { aspect-ratio: 3/4; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    /* Hover overlay */
+    .gallery-item-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, var(--deep-green-m) 0%, var(--emerald) 100%);
-      opacity: 0.8;
+      background: rgba(10, 25, 18, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 2;
     }
-    /* Dark gradient overlay so label is always readable */
-    .gallery-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 55%;
-      background: linear-gradient(to top, rgba(5,15,10,0.72) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 1;
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .gallery-item-overlay svg {
+      width: 36px; height: 36px;
+      color: var(--white);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
     }
-    .gallery-item-label {
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(5, 14, 9, 0.96);
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      user-select: none;
+    }
+    .lightbox-close {
       position: absolute;
-      bottom: 1.2rem;
-      left: 1.4rem;
-      right: 1.4rem;
+      top: 1.5rem; right: 1.5rem;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--white);
+      font-size: 1.2rem;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--white);
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .lightbox-arrow:hover { background: rgba(201,168,76,0.4); border-color: var(--gold); }
+    .lightbox-prev { left: 1.5rem; }
+    .lightbox-next { right: 1.5rem; }
+    .lightbox-arrow svg { width: 20px; height: 20px; }
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1.2rem; left: 50%; transform: translateX(-50%);
       font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.92);
+      color: rgba(255,255,255,0.55);
       font-family: 'Jost', sans-serif;
-      z-index: 2;
-    }
-    .gallery-item-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -55%);
-      z-index: 2;
-    }
-    .gallery-item-icon svg {
-      width: 44px;
-      height: 44px;
-      color: rgba(201,168,76,0.82);
+      letter-spacing: 0.1em;
     }
 
     /* ===== CONTACT ===== */
@@ -1035,9 +1080,10 @@
       .price-grid { grid-template-columns: 1fr; }
       .solarium { padding: 5rem 4%; }
       .gallery { padding: 5rem 4%; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
       .gallery-item:nth-child(1),
-      .gallery-item:nth-child(4) { grid-row: auto; aspect-ratio: 3/4; }
+      .gallery-item:nth-child(6),
+      .gallery-item:nth-child(11) { aspect-ratio: 4/3; }
       .contact { padding: 5rem 4%; }
       .form-row { grid-template-columns: 1fr; }
       footer { padding: 3rem 4% 1.5rem; }
@@ -1285,82 +1331,60 @@
       </p>
     </div>
 
-    <div class="gallery-grid">
-      <!-- Dámské střihy: nůžky -->
-      <div class="gallery-item fade-up d1">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #162E20 0%, #2D5A40 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6" cy="6" r="3"/>
-            <circle cx="6" cy="18" r="3"/>
-            <line x1="20" y1="4" x2="8.12" y2="15.88"/>
-            <line x1="14.47" y1="14.48" x2="20" y2="20"/>
-            <line x1="8.12" y1="8.12" x2="12" y2="12"/>
-          </svg>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-item fade-up d1" data-src="photos/foto-2.jpg">
+        <img src="photos/foto-2.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Dámské střihy</div>
       </div>
-      <!-- Pánské střihy: holicí strojek (obdélník s linkou) -->
-      <div class="gallery-item fade-up d2">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #1E3A28 0%, #3D6B50 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- comb icon -->
-            <path d="M3 5h18v3a1 1 0 01-1 1H4a1 1 0 01-1-1V5z"/>
-            <line x1="7" y1="9" x2="7" y2="19"/>
-            <line x1="10" y1="9" x2="10" y2="19"/>
-            <line x1="13" y1="9" x2="13" y2="19"/>
-            <line x1="16" y1="9" x2="16" y2="19"/>
-          </svg>
+      <div class="gallery-item fade-up d2" data-src="photos/foto-5.jpg">
+        <img src="photos/foto-5.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Pánské střihy</div>
       </div>
-      <!-- Barvení: kapka barvy -->
-      <div class="gallery-item fade-up d3">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #2D5A40 0%, #1A3A2A 60%, #A88530 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
-          </svg>
+      <div class="gallery-item fade-up d3" data-src="photos/foto-6.jpg">
+        <img src="photos/foto-6.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Barvení</div>
       </div>
-      <!-- Balayage & Melíry: štětec / pero -->
-      <div class="gallery-item fade-up d1">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #0F2018 0%, #1A4030 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- paintbrush -->
-            <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a2.12 2.12 0 00-3-3z"/>
-            <path d="M9 8c-2 3-4 3.5-7 4l8 8c1-.5 3.5-2 4-7"/>
-            <path d="M14.5 17.5 4.5 15"/>
-          </svg>
+      <div class="gallery-item fade-up d1" data-src="photos/foto-7.jpg">
+        <img src="photos/foto-7.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Balayage & Melíry</div>
       </div>
-      <!-- Společenské účesy: hvězda/koruna -->
-      <div class="gallery-item fade-up d2">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #243F30 0%, #4A7A5A 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- crown -->
-            <path d="M3 19h18M5 19l2-8 5 4 5-4 2 8"/>
-            <circle cx="12" cy="7" r="2"/>
-          </svg>
+      <div class="gallery-item fade-up d2" data-src="photos/foto-8.jpg">
+        <img src="photos/foto-8.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Společenské účesy</div>
       </div>
-      <!-- Goldwell péče: list / příroda -->
-      <div class="gallery-item fade-up d3">
-        <div class="gallery-item-bg" style="background: linear-gradient(145deg, #1A3A2A 0%, #3D7A55 100%);"></div>
-        <div class="gallery-item-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- leaf -->
-            <path d="M17 8C8 10 5.9 16.17 3.82 19c0 0 .93.17 2.18.17C9.61 19.17 15 16.5 17 8z"/>
-            <path d="M3.82 19c0 0 2-4.83 5.18-7"/>
-          </svg>
+      <div class="gallery-item fade-up d3" data-src="photos/foto-9.jpg">
+        <img src="photos/foto-9.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </div>
-        <div class="gallery-item-label">Goldwell péče</div>
+      </div>
+      <div class="gallery-item fade-up d1" data-src="photos/foto-10.jpg">
+        <img src="photos/foto-10.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </div>
+      </div>
+      <div class="gallery-item fade-up d2" data-src="photos/foto-11.jpg">
+        <img src="photos/foto-11.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </div>
+      </div>
+      <div class="gallery-item fade-up d3" data-src="photos/foto-12.jpg">
+        <img src="photos/foto-12.jpg" alt="Cairo Salon — práce kadeřníků" loading="lazy" />
+        <div class="gallery-item-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </div>
       </div>
     </div>
   </div>
@@ -1566,6 +1590,19 @@
   </div>
 </footer>
 
+<!-- ===== LIGHTBOX HTML ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galerie">
+  <button class="lightbox-close" id="lbClose" aria-label="Zavřít">✕</button>
+  <button class="lightbox-arrow lightbox-prev" id="lbPrev" aria-label="Předchozí">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img class="lightbox-img" id="lbImg" src="" alt="Cairo Salon galerie" />
+  <button class="lightbox-arrow lightbox-next" id="lbNext" aria-label="Další">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lightbox-counter" id="lbCounter"></div>
+</div>
+
 <!-- ===== SCRIPTS ===== -->
 <script>
   // Scroll nav
@@ -1618,6 +1655,55 @@
     formSuccess.style.display = 'block';
     form.reset();
     setTimeout(() => { formSuccess.style.display = 'none'; }, 5000);
+  });
+
+  // ===== LIGHTBOX =====
+  const lightbox  = document.getElementById('lightbox');
+  const lbImg     = document.getElementById('lbImg');
+  const lbCounter = document.getElementById('lbCounter');
+  const galleryItems = Array.from(document.querySelectorAll('#galleryGrid .gallery-item'));
+  let currentIdx = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    const src = galleryItems[idx].dataset.src;
+    lbImg.src = src;
+    lbCounter.textContent = `${idx + 1} / ${galleryItems.length}`;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  function showNext() {
+    openLightbox((currentIdx + 1) % galleryItems.length);
+  }
+
+  function showPrev() {
+    openLightbox((currentIdx - 1 + galleryItems.length) % galleryItems.length);
+  }
+
+  galleryItems.forEach((item, idx) => {
+    item.addEventListener('click', () => openLightbox(idx));
+  });
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbNext').addEventListener('click', showNext);
+  document.getElementById('lbPrev').addEventListener('click', showPrev);
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
   });
 </script>
 </body>

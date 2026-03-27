@@ -1706,5 +1706,52 @@
     if (e.key === 'ArrowLeft') showPrev();
   });
 </script>
+<!-- ===== WATERMARK ===== -->
+<div id="watermark" style="
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+      <!-- Tmavá vrstva — viditelná na světlém pozadí -->
+      <pattern id="wm-dark" x="0" y="0" width="220" height="110" patternUnits="userSpaceOnUse" patternTransform="rotate(-25)">
+        <text x="10" y="36"
+          font-family="Jost, sans-serif"
+          font-size="11"
+          font-weight="500"
+          letter-spacing="1.5"
+          fill="rgba(0,0,0,0.1)">Demoverze – Tomáš Smolík</text>
+        <text x="10" y="88"
+          font-family="Jost, sans-serif"
+          font-size="11"
+          font-weight="500"
+          letter-spacing="1.5"
+          fill="rgba(0,0,0,0.1)">Demoverze – Tomáš Smolík</text>
+      </pattern>
+      <!-- Světlá vrstva — viditelná na tmavém pozadí -->
+      <pattern id="wm-light" x="0" y="0" width="220" height="110" patternUnits="userSpaceOnUse" patternTransform="rotate(-25)">
+        <text x="10" y="36"
+          font-family="Jost, sans-serif"
+          font-size="11"
+          font-weight="500"
+          letter-spacing="1.5"
+          fill="rgba(255,255,255,0.1)">Demoverze – Tomáš Smolík</text>
+        <text x="10" y="88"
+          font-family="Jost, sans-serif"
+          font-size="11"
+          font-weight="500"
+          letter-spacing="1.5"
+          fill="rgba(255,255,255,0.1)">Demoverze – Tomáš Smolík</text>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#wm-dark)"/>
+    <rect width="100%" height="100%" fill="url(#wm-light)"/>
+  </svg>
+</div>
+<!-- end watermark -->
+
 </body>
 </html>
